@@ -13,6 +13,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Base64.Decoder;
+import java.util.Base64.Encoder;
+import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -34,32 +37,32 @@ import org.owasp.webgoat.util.HtmlEncoder;
 
 
 /***************************************************************************************************
- * 
- * 
+ *
+ *
  * This file is part of WebGoat, an Open Web Application Security Project utility. For details,
  * please see http://www.owasp.org/
- * 
+ *
  * Copyright (c) 2002 - 20014 Bruce Mayhew
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under the terms of the
  * GNU General Public License as published by the Free Software Foundation; either version 2 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
  * General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with this program; if
  * not, write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
  * 02111-1307, USA.
- * 
+ *
  * Getting Source ==============
- * 
+ *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository for free software
  * projects.
- * 
+ *
  * For details, please see http://webgoat.github.io
- * 
+ *
  * @author Jeff Williams <a href="http://www.aspectsecurity.com">Aspect Security</a>
  * @created October 28, 2003
  */
@@ -77,9 +80,9 @@ public class Encoding extends LessonAdapter
 
     // local encoders
 
-    private static sun.misc.BASE64Decoder decoder = new sun.misc.BASE64Decoder();
+    private static Decoder decoder = Base64.getDecoder();
 
-    private static sun.misc.BASE64Encoder encoder = new sun.misc.BASE64Encoder();
+    private static Encoder encoder = Base64.getEncoder();
 
     // encryption constant
 
@@ -88,7 +91,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Returns the base 64 decoding of a string.
-     * 
+     *
      * @param str
      *            Description of the Parameter
      * @return Description of the Return Value
@@ -99,14 +102,14 @@ public class Encoding extends LessonAdapter
     public static String base64Decode(String str) throws IOException
     {
 
-        byte[] b = decoder.decodeBuffer(str);
+        byte[] b = decoder.decode(str);
 
         return (new String(b));
     }
 
     /**
      * Description of the Method
-     * 
+     *
      * @param c
      *            Description of the Parameter
      * @return Description of the Return Value
@@ -122,7 +125,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Description of the Method
-     * 
+     *
      * @param c
      *            Description of the Parameter
      * @return Description of the Return Value
@@ -136,7 +139,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Returns the base 64 encoding of a string.
-     * 
+     *
      * @param str
      *            Description of the Parameter
      * @return Description of the Return Value
@@ -147,12 +150,12 @@ public class Encoding extends LessonAdapter
 
         byte[] b = str.getBytes();
 
-        return (encoder.encode(b));
+        return (encoder.encode(b)).toString();
     }
 
     /**
      * Description of the Method
-     * 
+     *
      * @param b
      *            Description of the Parameter
      * @return Description of the Return Value
@@ -161,12 +164,12 @@ public class Encoding extends LessonAdapter
     public static String base64Encode(byte[] b)
     {
 
-        return (encoder.encode(b));
+        return (encoder.encode(b)).toString();
     }
 
     /**
      * Description of the Method
-     * 
+     *
      * @param s
      *            Description of the Parameter
      * @return Description of the Return Value
@@ -304,7 +307,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Convenience method for encrypting a string.
-     * 
+     *
      * @param str
      *            Description of the Parameter
      * @param pw
@@ -330,7 +333,7 @@ public class Encoding extends LessonAdapter
 
             passwordDecryptCipher.init(Cipher.DECRYPT_MODE, k, ps);
 
-            byte[] dec = decoder.decodeBuffer(str);
+            byte[] dec = decoder.decode(str);
 
             byte[] utf8 = passwordDecryptCipher.doFinal(dec);
 
@@ -347,7 +350,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Convenience method for encrypting a string.
-     * 
+     *
      * @param str
      *            Description of the Parameter
      * @param pw
@@ -379,7 +382,7 @@ public class Encoding extends LessonAdapter
 
             byte[] enc = passwordEncryptCipher.doFinal(utf8);
 
-            return encoder.encode(enc);
+            return encoder.encode(enc).toString();
         }
 
         catch (Exception e)
@@ -392,7 +395,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Gets the category attribute of the Encoding object
-     * 
+     *
      * @return The category value
      */
 
@@ -403,7 +406,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Gets the hints attribute of the HelloScreen object
-     * 
+     *
      * @return The hints value
      */
 
@@ -419,7 +422,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Gets the instructions attribute of the Encoding object
-     * 
+     *
      * @return The instructions value
      */
 
@@ -437,7 +440,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Gets the title attribute of the HelloScreen object
-     * 
+     *
      * @return The title value
      */
 
@@ -448,7 +451,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Returns the MD5 hash of a String.
-     * 
+     *
      * @param str
      *            Description of the Parameter
      * @return Description of the Return Value
@@ -474,7 +477,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Returns the SHA hash of a String.
-     * 
+     *
      * @param str
      *            Description of the Parameter
      * @return Description of the Return Value
@@ -498,7 +501,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Description of the Method
-     * 
+     *
      * @param hexString
      *            Description of the Parameter
      * @return Description of the Return Value
@@ -526,7 +529,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Description of the Method
-     * 
+     *
      * @param asciiString
      *            Description of the Parameter
      * @return Description of the Return Value
@@ -547,7 +550,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * The main program for the Encoding class
-     * 
+     *
      * @param args
      *            The command line arguments
      */
@@ -591,7 +594,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Description of the Method
-     * 
+     *
      * @param value1
      *            Description of the Parameter
      * @param value2
@@ -622,7 +625,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Description of the Method
-     * 
+     *
      * @param value1
      *            Description of the Parameter
      * @param value2
@@ -649,7 +652,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Description of the Method
-     * 
+     *
      * @param input
      *            Description of the Parameter
      * @return Description of the Return Value
@@ -687,7 +690,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Description of the Method
-     * 
+     *
      * @param str
      *            Description of the Parameter
      * @return Description of the Return Value
@@ -713,7 +716,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Description of the Method
-     * 
+     *
      * @param str
      *            Description of the Parameter
      * @return Description of the Return Value
@@ -736,7 +739,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Description of the Method
-     * 
+     *
      * @param str
      *            Description of the Parameter
      * @return Description of the Return Value
@@ -755,7 +758,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Description of the Method
-     * 
+     *
      * @param str
      *            Description of the Parameter
      * @return Description of the Return Value
@@ -774,7 +777,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Description of the Method
-     * 
+     *
      * @param input
      *            Description of the Parameter
      * @param userKey
@@ -806,7 +809,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Description of the Method
-     * 
+     *
      * @param input
      *            Description of the Parameter
      * @param userKey
@@ -828,7 +831,7 @@ public class Encoding extends LessonAdapter
 
     /**
      * Description of the Method
-     * 
+     *
      * @param input
      *            Description of the Parameter
      * @param userKey

