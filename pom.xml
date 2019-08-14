@@ -5,7 +5,7 @@
     <groupId>WebGoat</groupId>
     <artifactId>WebGoat</artifactId>
     <packaging>war</packaging>
-    <version>6.0.2</version>
+    <version>6.0.3</version>
 
     <!-- Shared version number properties -->
     <properties>
@@ -133,7 +133,7 @@
         <dependency>
             <groupId>commons-collections</groupId>
             <artifactId>commons-collections</artifactId>
-            <version>3.1</version>
+            <version>3.2.2</version>
         </dependency>
         <dependency>
             <groupId>commons-digester</groupId>
