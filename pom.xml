@@ -5,7 +5,7 @@
     <groupId>WebGoat</groupId>
     <artifactId>WebGoat</artifactId>
     <packaging>war</packaging>
-    <version>6.0.3</version>
+    <version>6.0.4</version>
 
     <!-- Shared version number properties -->
     <properties>
@@ -273,7 +273,7 @@
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>1.2.2</version>
+            <version>1.4</version>
         </dependency>
 
         <!-- Apache Commons Upload -->
